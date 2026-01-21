@@ -1,3 +1,4 @@
 *.json
 finetuned_CTI_BERT_soccare/*
 __pycache__/
+soccareenv/
