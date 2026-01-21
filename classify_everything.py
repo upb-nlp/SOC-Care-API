@@ -97,7 +97,7 @@ with open(f"{output_dir_path}/{timestamp}_combined.json", "w", encoding="utf-8")
 from api_inference_token_classification_model import TokenClassificationSecurityModel
 from api_visualization_table import EntityTableCSVExporter
 
-ner = TokenClassificationSecurityModel("finetuned_CTI_BERT_soccare", device='cpu')
+ner = TokenClassificationSecurityModel("/home/ubuntu/SOC-Care-API/finetuned_CTI_BERT_soccare", device='cpu')
 table_builder = EntityTableCSVExporter()
 
 
@@ -111,3 +111,5 @@ for i, res in enumerate(result):
         pred_spans=result[i]["pred_spans"],
         output_file=f"{output_dir_path}/{all_items[i]['id']}.csv",
 )
+    
+print("Token classification and CSV export completed.")
