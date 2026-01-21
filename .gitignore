@@ -2,3 +2,4 @@
 finetuned_CTI_BERT_soccare/*
 __pycache__/
 soccareenv/
+data_processed/
