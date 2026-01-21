@@ -4,24 +4,24 @@ import re
 from pathlib import Path
 from datetime import datetime
 
-BASE_DIR = Path(__file__).parent
+BASE_DIR = "/home/ubuntu/SOC-Care-API"
 
 SPIDERS = [
     {
         "dir": "thehackernews_spider",
-        "command": ["scrapy", "crawl", "thehackernews", "-o", "thehackernews.json"],
+        "command": ["/home/ubuntu/SOC-Care-API/soccareenv/bin/scrapy", "crawl", "thehackernews", "-o", "thehackernews.json"],
         "output": "thehackernews.json",
         "source": "The Hacker News",
     },
     {
         "dir": "securityweek",
-        "command": ["scrapy", "crawl", "securityweek", "-o", "securityweek.json"],
+        "command": ["/home/ubuntu/SOC-Care-API/soccareenv/bin/scrapy", "crawl", "securityweek", "-o", "securityweek.json"],
         "output": "securityweek.json",
         "source": "SecurityWeek",
     },
     {
         "dir": "bleeping_spider",
-        "command": ["scrapy", "crawl", "bleeping", "-o", "bleeping.json"],
+        "command": ["/home/ubuntu/SOC-Care-API/soccareenv/bin/scrapy", "crawl", "bleeping", "-o", "bleeping.json"],
         "output": "bleeping.json",
         "source": "BleepingComputer",
     },
@@ -37,7 +37,7 @@ for spider in SPIDERS:
     print(f"Running {spider['source']} spider...")
     subprocess.run(
         spider["command"],
-        cwd=BASE_DIR / spider["dir"],
+        cwd=f"{BASE_DIR}/{spider['dir']}",
         check=True
     )
 
@@ -49,7 +49,7 @@ all_items = []
 article_id = 1
 
 for spider in SPIDERS:
-    json_path = BASE_DIR / spider["dir"] / spider["output"]
+    json_path = f"{BASE_DIR}/{spider['dir']}/{spider['output']}"
 
     with open(json_path, encoding="utf-8") as f:
         data = json.load(f)
@@ -65,7 +65,8 @@ for spider in SPIDERS:
 # ------------------------
 
 for spider in SPIDERS:
-    json_path = BASE_DIR / spider["dir"] / spider["output"]
+    json_path = f"{BASE_DIR}/{spider['dir']}/{spider['output']}"
+    json_path = Path(json_path)
 
     if json_path.exists():
         json_path.unlink()
@@ -83,7 +84,7 @@ for item in all_items:
         item["body"] = item["body"].replace(u'\xa0', u' ')
 
 # Create a directory for output files if it doesn't exist
-output_dir_path = f"data_processed/{timestamp}_outputs"
+output_dir_path = f"{BASE_DIR}/data_processed/{timestamp}_outputs"
 Path(output_dir_path).mkdir(parents=True, exist_ok=True)
 
 with open(f"{output_dir_path}/{timestamp}_combined.json", "w", encoding="utf-8") as f:
