@@ -1,0 +1,5 @@
+itemadapter==0.13.1
+scrapy==2.14.1
+torch==2.9.1
+transformers==4.57.1
+w3lib==2.3.1
