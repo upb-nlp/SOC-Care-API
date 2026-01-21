@@ -83,7 +83,7 @@ for item in all_items:
         item["body"] = item["body"].replace(u'\xa0', u' ')
 
 # Create a directory for output files if it doesn't exist
-output_dir_path = f"SOC-Care-API/{timestamp}_outputs"
+output_dir_path = f"{timestamp}_outputs"
 Path(output_dir_path).mkdir(parents=True, exist_ok=True)
 
 with open(f"{output_dir_path}/{timestamp}_combined.json", "w", encoding="utf-8") as f:
