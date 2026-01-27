@@ -138,3 +138,34 @@ class EntityTableCSVExporter:
 
             for row in rows:
                 writer.writerow(row)
+
+    def to_column_dict(
+        self,
+        pred_spans: List[Dict[str, Any]],
+        *,
+        sort_by_text_position: bool = True,
+        unique: bool = False,
+    ) -> Dict[str, List[str]]:
+        """
+        Convert predicted spans into a column-oriented dictionary.
+
+        Output format:
+            {
+              "ORG": ["ACME Corp", "Globex"],
+              "INCIDENT": ["security incident"]
+            }
+        """
+        grouped = self._group_by_label(pred_spans)
+
+        if sort_by_text_position:
+            for lab in grouped:
+                grouped[lab].sort(key=lambda x: x["start"])
+
+        if unique:
+            grouped = self._deduplicate(grouped)
+
+        return {
+            label: [sp["text"] for sp in spans]
+            for label, spans in grouped.items()
+        }
+

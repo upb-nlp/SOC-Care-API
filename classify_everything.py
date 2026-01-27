@@ -87,9 +87,6 @@ for item in all_items:
 output_dir_path = f"{BASE_DIR}/data_processed/{timestamp}_outputs"
 Path(output_dir_path).mkdir(parents=True, exist_ok=True)
 
-with open(f"{output_dir_path}/{timestamp}_combined.json", "w", encoding="utf-8") as f:
-    json.dump(all_items, f, ensure_ascii=False, indent=4)
-
 # -----------------------------------------------------
 # TOKEN CLASSIFICATION PART
 # -----------------------------------------------------
@@ -104,6 +101,16 @@ table_builder = EntityTableCSVExporter()
 payload = [item["body"] for item in all_items]
 
 result = ner.generate(payload)
+
+for i, item in enumerate(all_items):
+    item["predicted_result"] = table_builder.to_column_dict(
+        result[i]["pred_spans"],
+        sort_by_text_position=True,
+        unique=True,
+    )
+
+with open(f"{output_dir_path}/{timestamp}_combined.json", "w", encoding="utf-8") as f:
+    json.dump(all_items, f, ensure_ascii=False, indent=4)
 
 for i, res in enumerate(result):
     table_builder.export(
